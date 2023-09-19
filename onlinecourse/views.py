@@ -134,10 +134,10 @@ def submit(request, course_id):
 
 def extract_answers(request):
     submitted_anwsers = []
-    for key in request.POST:
-        if key.startswith('choice'):
+    for key, value in request.POST.items():
+        if key.startswith('choice') or value == 'on':
             value = request.POST[key]
-            choice_id = int(value)
+            choice_id = int(key.split('_')[1])
             submitted_anwsers.append(choice_id)
     return submitted_anwsers
 
@@ -166,8 +166,6 @@ def calculate_question_grades(course, submission):
         selected_incorrect_choices = selected_choices.filter(
             is_correct=False).count()
         
-        total_choices = question.choice_set.count()
-        
         if total_correct_choices == 0:
             question_grade = 0.0
         else:
@@ -180,7 +178,6 @@ def calculate_question_grades(course, submission):
             
             question_grade = max(correct_choices_score - penalty_score, 0.0)
 
-        # Store the question grade in the dictionary
         question_grades[question.id] = question_grade
 
     return question_grades
@@ -211,7 +208,7 @@ def show_exam_result(request, course_id, submission_id):
             'question_text': question.question_text,
             'choices': choices_correctness,
             'question_id': question.id,
-            'grade': question_grades.get(question.id, 0.0),  # Set default grade to 0.0
+            'grade': question_grades.get(question.id, 0.0)
         })
 
     context['course'] = course
