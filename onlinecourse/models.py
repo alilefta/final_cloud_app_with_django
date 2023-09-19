@@ -96,6 +96,11 @@ class Enrollment(models.Model):
     mode = models.CharField(max_length=5, choices=COURSE_MODES, default=AUDIT)
     rating = models.FloatField(default=5.0)
 
+    def __str__(self):
+        return "User: " + self.user.username + "," + \
+               "Course: " + self.course.name + "," + \
+               "Mode: " + self.mode
+
 
 # <HINT> Create a Question Model with:
     # Used to persist question content for a course

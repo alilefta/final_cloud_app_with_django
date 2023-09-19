@@ -35,7 +35,7 @@ class QuestionInline(admin.StackedInline):
 class QuestionAdmin(admin.ModelAdmin):
     inlines = [ChoiceInline]
     list_display = ['question_text', 'grade', 'get_choices_display']
-    # list_filter = ['pub_date']
+    list_filter = ['question_text']
     search_fields = ['question_text']
 
     def get_choices_display(self, obj):
@@ -48,7 +48,7 @@ class QuestionAdmin(admin.ModelAdmin):
 
 class ChoiceAdmin(admin.ModelAdmin):
     list_display = ['choice_text', 'is_correct', 'question_text']
-    # list_filter = ['pub_date']
+    list_filter = ['choice_text']
     search_fields = ['choice_text']
 
     def question_text(self, obj):
